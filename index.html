@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>STATE v. HALE</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Playfair+Display:wght@600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet"/>
+<style>
+:root{--wood:#2a1c12;--cream:#f4ead6;--paper:#f7f1e4;--ink:#1a140f;--muted:#6b5a4a;--gold:#c4a46a;--gold-dim:#8a7044;--blood:#8b2e2e;--ok:#2f6b4f;--line:rgba(196,164,106,.35)}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{color:var(--ink);background:radial-gradient(1200px 700px at 20% -10%,rgba(196,164,106,.12),transparent 50%),linear-gradient(180deg,#1b120c,#120c09);font-family:"Source Serif 4",Georgia,serif}
+.app{min-height:100%;display:grid;grid-template-rows:auto 1fr auto}
+.topbar{display:flex;justify-content:space-between;gap:1rem;padding:.85rem 1.3rem;background:#2a1c12;border-bottom:1px solid var(--line);color:var(--cream);flex-wrap:wrap}
+.brand small{display:block;font-family:"IBM Plex Sans",sans-serif;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;opacity:.7}
+.brand strong{font-family:"Playfair Display",serif}
+.docket{display:flex;gap:.5rem;flex-wrap:wrap;font-family:"IBM Plex Sans",sans-serif;font-size:.75rem}
+.pill{border:1px solid var(--line);padding:.25rem .6rem;border-radius:999px}
+.layout{display:grid;grid-template-columns:1fr 300px}
+.stage{padding:1.4rem}
+.panel{max-width:920px;margin:0 auto;background:var(--paper);border:1px solid #d7c7a8;box-shadow:0 18px 50px rgba(0,0,0,.35);padding:1.5rem}
+.kicker{font-family:"IBM Plex Sans",sans-serif;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dim);margin:0 0 .35rem}
+h1,h2,h3{font-family:"Playfair Display",serif;margin:0 0 .55rem}h1{font-size:clamp(2rem,4vw,3rem)}
+p{line-height:1.55;margin:0 0 .8rem}.muted{color:var(--muted)}
+.quote{margin:1rem 0;padding:.85rem 1rem;background:#efe4cd;border-left:3px solid var(--gold-dim);font-style:italic}
+.actions{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}
+.btn{border:1px solid #3d2a1b;background:#2a1c12;color:var(--cream);padding:.62rem .95rem;cursor:pointer}
+.btn:hover{background:#422918}.btn.ghost{background:transparent;color:var(--ink);border-color:#b9a888}
+.hidden{display:none!important}
+.juror-grid,.choice-grid{display:grid;gap:.7rem;margin:1rem 0}
+.juror-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card,.choice{border:1px solid #d2c1a1;background:#fffaf0;padding:.85rem .95rem;cursor:pointer;text-align:left}
+.card.selected{outline:2px solid var(--blood);background:#f8ece4}.card.cause{outline:2px solid #a15c1a}
+.meta{font-family:"IBM Plex Sans",sans-serif;font-size:.78rem;color:var(--muted);margin-bottom:.4rem}
+.sidebar{background:#1a120d;color:var(--cream);border-left:1px solid var(--line);padding:1.1rem 1rem}
+.sidebar h2{color:var(--gold);font-size:.95rem;letter-spacing:.08em;text-transform:uppercase}
+.side-block{margin-bottom:1rem}.log-item{font-size:.86rem;color:#e6d7bd;margin:.35rem 0}.log-item b{color:var(--gold)}
+.footer{padding:.5rem 1.2rem;background:#120c09;color:#b9a888;font-family:"IBM Plex Sans",sans-serif;font-size:.75rem;display:flex;justify-content:space-between}
+.dialogue{display:flex;flex-direction:column;gap:.65rem;margin:1rem 0}
+.bubble{background:#fffaf0;border:1px solid #d2c1a1;padding:.75rem}
+.bubble .who{font-family:"IBM Plex Sans",sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.25rem}
+.bubble.state{border-left:3px solid var(--blood)}.bubble.defense{border-left:3px solid var(--ok)}.bubble.judge{border-left:3px solid #5a3d28}.bubble.witness{border-left:3px solid #4a6280}.bubble.jury{border-left:3px solid var(--gold)}
+.verdict-mark{margin-top:1rem;padding:1rem;text-align:center;background:#1a140f;color:var(--cream)}.verdict-mark h2{color:var(--gold);font-size:1.8rem}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><small>Harbor County Circuit Court</small><strong>State of Florida v. Morgan Hale</strong></div>
+  <div class="docket">
+    <span class="pill" id="phase-pill">Call</span>
+    <span class="pill" id="strike-pill">Peremptories: 3</span>
+    <span class="pill" id="obj-pill">Objections 0-0</span>
+    <span class="pill" id="jury-pill">Jury: unsworn</span>
+  </div>
+</header>
+<div class="layout">
+<main class="stage">
+<section id="phase-title" class="panel">
+  <p class="kicker">A courtroom simulation</p>
+  <h1>STATE v. HALE</h1>
+  <p class="lead">You are lead counsel for Morgan Hale, charged with first-degree murder. Pick a jury, object under the rules of evidence, decide whether she takes the stand, then watch six strangers argue.</p>
+  <p class="muted">Fiction. Violence stays off-stage. Not legal advice.</p>
+  <div class="actions"><button class="btn" id="btn-begin">Call the case</button></div>
+</section>
+<section id="phase-file" class="panel hidden">
+  <p class="kicker">Discovery</p><h2>The file</h2>
+  <p>March 14, 2026. Chris Hale dies in their kitchen. One wound. Knife from their block. No forced entry. 911 at 6:52 p.m. Time of death about 6:00-6:30.</p>
+  <p><b>State theory:</b> affair with Taylor Quinn; $800,000 life policy; first words to police: "I came home and found him." Chris texted at 4:47: "Tonight I tell her."</p>
+  <p><b>Your file:</b> BAC 0.11, knuckle bruising, both prints on the handle, prior shouting calls, shock searches at 6:41. She stayed on scene.</p>
+  <div class="actions"><button class="btn" id="btn-to-client">See the client</button></div>
+</section>
+<section id="phase-client" class="panel hidden">
+  <p class="kicker">Holding conference</p><h2>Morgan Hale</h2>
+  <div class="quote">"He grabbed the knife. We fought for it. Then he was on the floor. I know what I said to the detective. I was trying not to fall apart."</div>
+  <p>If she testifies, Barrett reads the first statement back. If she does not, the box looks at the empty chair.</p>
+  <div class="actions"><button class="btn" id="btn-to-voir">Go to voir dire</button></div>
+</section>
+<section id="phase-voir" class="panel hidden">
+  <p class="kicker">Jury selection</p><h2>The box</h2>
+  <p>Click up to three to strike. Select one and challenge for cause once. Barrett then cuts people who look too good for you.</p>
+  <p id="voir-status" class="muted"></p>
+  <div id="juror-box" class="juror-grid"></div>
+  <p id="cause-result" class="muted"></p>
+  <div class="actions">
+    <button class="btn ghost" id="btn-cause">Challenge selected for cause</button>
+    <button class="btn" id="btn-seat">Seat the panel</button>
+  </div>
+</section>
+<section id="phase-seated" class="panel hidden">
+  <p class="kicker">Empaneled</p><h2>The jury is sworn</h2>
+  <div id="seat-report"></div>
+  <div class="actions"><button class="btn" id="btn-to-opening">Openings</button></div>
+</section>
+<section id="phase-opening" class="panel hidden">
+  <p class="kicker">Opening statements</p><h2>How do you start?</h2>
+  <div id="opening-choices" class="choice-grid"></div>
+  <div id="opening-result" class="dialogue"></div>
+  <div class="actions"><button class="btn hidden" id="btn-to-state">The State calls its first witness</button></div>
+</section>
+<section id="phase-state" class="panel hidden">
+  <p class="kicker" id="beat-kicker">State's case</p>
+  <h2 id="beat-speaker">Witness</h2>
+  <p id="beat-prompt"></p><p id="beat-offer" class="muted"></p>
+  <div id="beat-choices" class="choice-grid"></div>
+  <p id="beat-result"></p>
+  <div class="actions"><button class="btn hidden" id="beat-next">Next</button></div>
+</section>
+<section id="phase-defense" class="panel hidden">
+  <p class="kicker">Defense case</p><h2>Do you offer the prior calls?</h2>
+  <p>Two old noise complaints. Chris was the one shouting.</p>
+  <div class="actions">
+    <button class="btn" id="btn-priors-yes">Offer the priors</button>
+    <button class="btn ghost" id="btn-priors-no">Leave them out</button>
+  </div>
+  <p id="priors-result"></p>
+  <div class="actions"><button class="btn hidden" id="btn-to-stand">The defendant</button></div>
+</section>
+<section id="phase-stand" class="panel hidden">
+  <p class="kicker">Fifth Amendment</p><h2>Does Morgan take the stand?</h2>
+  <div id="stand-choices" class="choice-grid"></div>
+  <div id="stand-result" class="dialogue"></div>
+  <div class="actions"><button class="btn hidden" id="stand-next">Closings</button></div>
+</section>
+<section id="phase-closing" class="panel hidden">
+  <p class="kicker">Summation</p><h2>Last word to the box</h2>
+  <div id="closing-choices" class="choice-grid"></div>
+  <div id="closing-result" class="dialogue"></div>
+  <div class="actions"><button class="btn hidden" id="btn-to-jury">Watch them deliberate</button></div>
+</section>
+<section id="phase-deliberate" class="panel hidden">
+  <p class="kicker">Jury room</p><h2>You are not in here</h2>
+  <div id="jury-log" class="dialogue"></div>
+  <div id="verdict-box" class="verdict-mark hidden">
+    <p class="kicker">The verdict</p>
+    <h2 id="verdict-title"></h2>
+    <p id="verdict-hed"></p>
+    <p id="verdict-body"></p>
+    <div id="verdict-stats"></div>
+    <div class="actions" style="justify-content:center"><button class="btn" id="btn-restart">Try the case again</button></div>
+  </div>
+</section>
+</main>
+<aside class="sidebar">
+  <div class="side-block"><h2>Docket</h2><p id="side-phase">Call</p></div>
+  <div class="side-block"><h2>Seated jury</h2><ul id="side-jury"><li>Not seated.</li></ul></div>
+  <div class="side-block"><h2>What came in</h2><div id="side-evidence"><div class="log-item">Nothing admitted yet.</div></div></div>
+  <div class="side-block"><h2>Pocket card</h2><ul>
+    <li>Hearsay - out-of-court statement for its truth</li>
+    <li>404 - character to prove action</li>
+    <li>403 - unfair prejudice</li>
+    <li>Speculation - guess, not fact</li>
+    <li>Admission - what your client said still comes in</li>
+  </ul></div>
+</aside>
+</div>
+<footer class="footer"><span>STATE v. HALE</span><span>drewarrowood/hale-play</span></footer>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
